@@ -20,3 +20,6 @@ Run it:
 
 ## Testando a aplicação
 > curl http://localhost:8080/greeting?name=Kotlin
+
+## Testando o Swagger
+Agora pode abrir o abrir no navegador na seguinte url http://localhost:8080/swagger-ui.html e ver o resultado.
