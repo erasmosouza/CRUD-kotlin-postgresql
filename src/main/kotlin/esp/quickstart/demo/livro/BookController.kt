@@ -8,29 +8,29 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("/api")
-class LivroController(
-    private val livroRepository: LivroRepository,
+class BookController(
+    private val bookRepository: BookRepository,
     private val categoryRepository: CategoryRepository
 ) {
 
     @GetMapping("/livros")
-    fun getAllLivros(): List<Livro> = livroRepository.findAll()
+    fun getAllLivros(): List<Book> = bookRepository.findAll()
 
     @PostMapping("/livros")
-    fun createNewLivro(@Valid @RequestBody livro: Livro) {
-        livro.category?.let { categoryRepository.save(it) }
-        livroRepository.save(livro)
+    fun createNewLivro(@Valid @RequestBody book: Book) {
+        book.category?.let { categoryRepository.save(it) }
+        bookRepository.save(book)
     }
 
     @GetMapping("/livros/{id}")
-    fun getLivroById(@PathVariable("id") livroId: Long): ResponseEntity<Livro> {
-        return livroRepository.findById(livroId).map { livro -> ResponseEntity.ok(livro) }
+    fun getLivroById(@PathVariable("id") livroId: Long): ResponseEntity<Book> {
+        return bookRepository.findById(livroId).map { livro -> ResponseEntity.ok(livro) }
             .orElse(ResponseEntity.notFound().build())
     }
 
     fun deleteLivroById(@PathVariable("id") livroId: Long): ResponseEntity<Void> {
-        return livroRepository.findById(livroId).map { livro ->
-            livroRepository.delete(livro)
+        return bookRepository.findById(livroId).map { livro ->
+            bookRepository.delete(livro)
             ResponseEntity<Void>(HttpStatus.OK)
         }.orElse(ResponseEntity.notFound().build())
     }

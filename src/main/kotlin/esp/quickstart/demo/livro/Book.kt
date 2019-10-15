@@ -6,7 +6,7 @@ import javax.persistence.*
 import javax.validation.constraints.NotBlank
 
 @Entity
-data class Livro (
+data class Book (
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 

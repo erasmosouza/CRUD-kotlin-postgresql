@@ -1,7 +1,7 @@
 package esp.quickstart.demo.category
 
 import com.fasterxml.jackson.annotation.JsonManagedReference
-import esp.quickstart.demo.livro.Livro
+import esp.quickstart.demo.livro.Book
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
 
@@ -15,5 +15,5 @@ data class Category (
 
     @JsonManagedReference
     @OneToMany(mappedBy = "categoria", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.EAGER)
-    var livros: MutableSet<Livro>? = null
+    var books: MutableSet<Book>? = null
 )
