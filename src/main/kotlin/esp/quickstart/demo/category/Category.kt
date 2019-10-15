@@ -14,6 +14,6 @@ data class Category (
     val categoryName: String = "",
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "categoria", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "category", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.EAGER)
     var books: MutableSet<Book>? = null
 )

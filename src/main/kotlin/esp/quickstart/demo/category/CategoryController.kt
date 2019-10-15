@@ -9,27 +9,27 @@ import javax.validation.Valid
 @RequestMapping("/api")
 class CategoryController(private val categoryRepository: CategoryRepository) {
 
-    @GetMapping("/categorias")
+    @GetMapping("/categories")
     fun getAllCateggorias(): List<Category> = categoryRepository.findAll()
 
-    @PostMapping("/categorias")
+    @PostMapping("/categories")
     fun createNewCategoria(@Valid @RequestBody category: Category): ResponseEntity<Category> {
         categoryRepository.save(category)
         return ResponseEntity.ok(category)
     }
 
-    @GetMapping("/categorias/{id}")
-    fun getLivroById(@PathVariable(value = "id") categoriaId: Long): ResponseEntity<Category> {
-        return categoryRepository.findById(categoriaId).map { categoria ->
-            ResponseEntity.ok(categoria)
+    @GetMapping("/categories/{id}")
+    fun getLivroById(@PathVariable(value = "id") categoryId: Long): ResponseEntity<Category> {
+        return categoryRepository.findById(categoryId).map { category ->
+            ResponseEntity.ok(category)
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    @DeleteMapping("/categorias/{id}")
-    fun deleteLivroById(@PathVariable(value = "id") categoriaId: Long): ResponseEntity<Void> {
+    @DeleteMapping("/categories/{id}")
+    fun deleteLivroById(@PathVariable(value = "id") categoryId: Long): ResponseEntity<Void> {
 
-        return categoryRepository.findById(categoriaId).map { categoria ->
-            categoryRepository.delete(categoria)
+        return categoryRepository.findById(categoryId).map { category ->
+            categoryRepository.delete(category)
             ResponseEntity<Void>(HttpStatus.OK)
         }.orElse(ResponseEntity.notFound().build())
 
