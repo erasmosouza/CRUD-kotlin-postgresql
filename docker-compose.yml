@@ -1,0 +1,40 @@
+# Execute "docker-compose up -d" in the terminal
+# Execute "docker-compose stop" to stop the containers
+
+version: '3'
+
+services:
+  teste-postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres-network
+    volumes:
+      - /Users/erasmo.pinheiro/Developer/docker-volume/postgresql/data:/var/lib/postgresql/data
+    environment:
+      - "POSTGRES_PASSWORD:Admin123"
+  customer-api:
+    image: dockerdemo
+    ports:
+      - "3081:8080"
+    networks:
+      - postgres-network
+    depends_on:
+      - teste-postgres
+#
+#  teste-pdadmin:
+#    image: dpage/pgadmin4:latest
+#    ports:
+#      - "15432:80"
+#    networks:
+#      - postgres-network
+#    environment:
+#      - "PGADMIN_DEFAULT_EMAIL:erasmosouza@gmail.com"
+#      - "PGADMIN_DEFAULT_PASSWORD:Admin123"
+#    depends_on:
+#      - teste-postgres
+
+networks:
+  postgres-network:
+    driver: bridge
