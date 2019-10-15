@@ -4,7 +4,7 @@
 version: '3'
 
 services:
-  teste-postgres:
+  customer-db-postgres:
     image: postgres
     ports:
       - "5432:5432"
@@ -21,19 +21,7 @@ services:
     networks:
       - postgres-network
     depends_on:
-      - teste-postgres
-#
-#  teste-pdadmin:
-#    image: dpage/pgadmin4:latest
-#    ports:
-#      - "15432:80"
-#    networks:
-#      - postgres-network
-#    environment:
-#      - "PGADMIN_DEFAULT_EMAIL:erasmosouza@gmail.com"
-#      - "PGADMIN_DEFAULT_PASSWORD:Admin123"
-#    depends_on:
-#      - teste-postgres
+      - customer-db-postgres
 
 networks:
   postgres-network:

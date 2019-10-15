@@ -1,6 +1,7 @@
-package esp.quickstart.model
+package esp.quickstart.demo.livro
 
 import com.fasterxml.jackson.annotation.JsonBackReference
+import esp.quickstart.demo.category.Category
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
 
@@ -18,5 +19,5 @@ data class Livro (
     @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "categoria_id")
-    val categoria: Categoria? = null
+    val category: Category? = null
 )

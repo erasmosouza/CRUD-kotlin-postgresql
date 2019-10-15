@@ -26,7 +26,7 @@ Agora pode abrir o abrir no navegador na seguinte url http://localhost:8080/swag
 
 ## Testando o Docker
 Agora que temos o jar da aplicação, vamos criar o docker:
->docker build . -t dockerdemo
+>docker build . -t customer-api:1.0
 
 Checar se a criação foi com sucesso:
 >docker images

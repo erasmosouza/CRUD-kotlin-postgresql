@@ -1,8 +1,6 @@
-package esp.quickstart.controller
+package esp.quickstart.demo.livro
 
-import esp.quickstart.model.Livro
-import esp.quickstart.repository.CategoriaRepository
-import esp.quickstart.repository.LivroRepository
+import esp.quickstart.demo.category.CategoryRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -12,7 +10,7 @@ import javax.validation.Valid
 @RequestMapping("/api")
 class LivroController(
     private val livroRepository: LivroRepository,
-    private val categoriaRepository: CategoriaRepository
+    private val categoryRepository: CategoryRepository
 ) {
 
     @GetMapping("/livros")
@@ -20,7 +18,7 @@ class LivroController(
 
     @PostMapping("/livros")
     fun createNewLivro(@Valid @RequestBody livro: Livro) {
-        livro.categoria?.let { categoriaRepository.save(it) }
+        livro.category?.let { categoryRepository.save(it) }
         livroRepository.save(livro)
     }
 
