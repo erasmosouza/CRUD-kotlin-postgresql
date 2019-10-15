@@ -10,23 +10,23 @@ import javax.validation.Valid
 class CategoryController(private val categoryRepository: CategoryRepository) {
 
     @GetMapping("/categories")
-    fun getAllCateggorias(): List<Category> = categoryRepository.findAll()
+    fun getAllCategories(): List<Category> = categoryRepository.findAll()
 
     @PostMapping("/categories")
-    fun createNewCategoria(@Valid @RequestBody category: Category): ResponseEntity<Category> {
+    fun createNewCategory(@Valid @RequestBody category: Category): ResponseEntity<Category> {
         categoryRepository.save(category)
         return ResponseEntity.ok(category)
     }
 
     @GetMapping("/categories/{id}")
-    fun getLivroById(@PathVariable(value = "id") categoryId: Long): ResponseEntity<Category> {
+    fun getCategoryById(@PathVariable(value = "id") categoryId: Long): ResponseEntity<Category> {
         return categoryRepository.findById(categoryId).map { category ->
             ResponseEntity.ok(category)
         }.orElse(ResponseEntity.notFound().build())
     }
 
     @DeleteMapping("/categories/{id}")
-    fun deleteLivroById(@PathVariable(value = "id") categoryId: Long): ResponseEntity<Void> {
+    fun deleteCategoryById(@PathVariable(value = "id") categoryId: Long): ResponseEntity<Void> {
 
         return categoryRepository.findById(categoryId).map { category ->
             categoryRepository.delete(category)

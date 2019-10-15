@@ -1,6 +1,8 @@
-package esp.quickstart.demo.livro
+package esp.quickstart.demo.book
 
 import esp.quickstart.demo.category.CategoryRepository
+import esp.quickstart.demo.livro.Book
+import esp.quickstart.demo.livro.BookRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -13,26 +15,25 @@ class BookController(
     private val categoryRepository: CategoryRepository
 ) {
 
-    @GetMapping("/livros")
-    fun getAllLivros(): List<Book> = bookRepository.findAll()
+    @GetMapping("/books")
+    fun getAllBooks(): List<Book> = bookRepository.findAll()
 
-    @PostMapping("/livros")
-    fun createNewLivro(@Valid @RequestBody book: Book) {
+    @PostMapping("/books")
+    fun createNewBook(@Valid @RequestBody book: Book) {
         book.category?.let { categoryRepository.save(it) }
         bookRepository.save(book)
     }
 
-    @GetMapping("/livros/{id}")
-    fun getLivroById(@PathVariable("id") livroId: Long): ResponseEntity<Book> {
-        return bookRepository.findById(livroId).map { livro -> ResponseEntity.ok(livro) }
+    @GetMapping("/books/{id}")
+    fun getBookById(@PathVariable("id") bookId: Long): ResponseEntity<Book> {
+        return bookRepository.findById(bookId).map { book -> ResponseEntity.ok(book) }
             .orElse(ResponseEntity.notFound().build())
     }
 
-    fun deleteLivroById(@PathVariable("id") livroId: Long): ResponseEntity<Void> {
-        return bookRepository.findById(livroId).map { livro ->
-            bookRepository.delete(livro)
+    fun deleteBookById(@PathVariable("id") bookId: Long): ResponseEntity<Void> {
+        return bookRepository.findById(bookId).map { book ->
+            bookRepository.delete(book)
             ResponseEntity<Void>(HttpStatus.OK)
         }.orElse(ResponseEntity.notFound().build())
     }
-
 }

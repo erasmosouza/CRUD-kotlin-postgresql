@@ -11,13 +11,16 @@ data class Book (
     val id: Long = 0,
 
     @get: NotBlank
-    val titulo: String = "",
+    val title: String = "",
 
     @get: NotBlank
-    val autor: String = "",
+    val author: String = "",
+
+    @get: NotBlank
+    val description: String = "",
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "categoria_id")
+    @JoinColumn(name = "category_id")
     val category: Category? = null
 )
