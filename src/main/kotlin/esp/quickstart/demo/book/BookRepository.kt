@@ -1,4 +1,4 @@
-package esp.quickstart.demo.livro
+package esp.quickstart.demo.book
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository

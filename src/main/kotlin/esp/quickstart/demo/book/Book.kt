@@ -1,6 +1,7 @@
-package esp.quickstart.demo.livro
+package esp.quickstart.demo.book
 
 import com.fasterxml.jackson.annotation.JsonBackReference
+import com.fasterxml.jackson.annotation.JsonManagedReference
 import esp.quickstart.demo.category.Category
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
@@ -19,7 +20,7 @@ data class Book (
     @get: NotBlank
     val description: String = "",
 
-    @JsonBackReference
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     val category: Category? = null

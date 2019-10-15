@@ -1,8 +1,6 @@
 package esp.quickstart.demo.book
 
 import esp.quickstart.demo.category.CategoryRepository
-import esp.quickstart.demo.livro.Book
-import esp.quickstart.demo.livro.BookRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -19,9 +17,10 @@ class BookController(
     fun getAllBooks(): List<Book> = bookRepository.findAll()
 
     @PostMapping("/books")
-    fun createNewBook(@Valid @RequestBody book: Book) {
+    fun createNewBook(@Valid @RequestBody book: Book): ResponseEntity<Book> {
         book.category?.let { categoryRepository.save(it) }
         bookRepository.save(book)
+        return ResponseEntity.ok(book)
     }
 
     @GetMapping("/books/{id}")

@@ -4,7 +4,7 @@
 version: '3'
 
 services:
-  customer-db-postgres:
+  demo-db-postgres:
     image: postgres
     ports:
       - "5432:5432"
@@ -14,14 +14,14 @@ services:
       - /Users/erasmo.pinheiro/Developer/docker-volume/postgresql/data:/var/lib/postgresql/data
     environment:
       - "POSTGRES_PASSWORD:Admin123"
-  customer-api:
-    image: dockerdemo
+  demo-api-kotlin:
+    image: demo-api:1.0
     ports:
-      - "3081:8080"
+      - "8080:8080"
     networks:
       - postgres-network
     depends_on:
-      - customer-db-postgres
+      - demo-db-postgres
 
 networks:
   postgres-network:
