@@ -6,16 +6,16 @@ import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.sql.Timestamp
 import java.util.*
-import javax.persistence.EntityListeners
-import javax.persistence.MappedSuperclass
-import javax.persistence.Temporal
-import javax.persistence.TemporalType
+import javax.persistence.*
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener::class)
-@JsonIgnoreProperties(value = arrayOf("createdAt", "updatedAt"), allowGetters = true)
+@JsonIgnoreProperties(value = arrayOf("createdAt", "updatedAt", "version"), allowGetters = true)
 open class Audit()
 {
+
+    @Version
+    var version: Long? = null
 
     //@Temporal(TemporalType.TIMESTAMP)
     @CreatedDate

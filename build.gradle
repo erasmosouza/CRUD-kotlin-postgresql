@@ -1,4 +1,3 @@
-
 buildscript {
     ext.kotlin_version = '1.3.50' // Required for Kotlin integration
     ext.spring_boot_version = '2.1.0.RELEASE'
@@ -14,7 +13,6 @@ buildscript {
     }
 }
 
-
 apply plugin: 'java'
 apply plugin: 'org.jetbrains.kotlin.jvm'
 apply plugin: 'kotlin' // Required for Kotlin integration
@@ -22,10 +20,6 @@ apply plugin: "kotlin-spring" // https://kotlinlang.org/docs/reference/compiler-
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'docker' // applying docker plugin
-
-//apply plugin: 'org.jetbrains.kotlin.plugin.jpa'
-
-
 
 group = 'esp.quickstart'
 version = '1.1-SNAPSHOT'
@@ -42,7 +36,6 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('io.springfox:springfox-swagger2:2.7.0')// Adicionando Swagger
     compile('io.springfox:springfox-swagger-ui:2.7.0')// Adicionando Swagger-ui
-    runtime('org.postgresql:postgresql')
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-mustache")
@@ -51,6 +44,7 @@ dependencies {
 
     runtimeOnly("com.h2database:h2:1.4.197") // Fixed version as a workaround for https://github.com/h2database/h2database/issues/1841
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
+    runtime('org.postgresql:postgresql')
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile group: 'junit', name: 'junit', version: '4.12'
