@@ -5,36 +5,36 @@ version: '3'
 
 services:
   demo-db-postgres:
-    image: postgres
-    ports:
-      - "5432:5432"
-    networks:
-      - postgres-network
-    volumes:
-      - /Users/erasmo.pinheiro/Developer/docker-volume/postgresql/data:/var/lib/postgresql/data
     environment:
       - "POSTGRES_PASSWORD:Admin123"
+    image: postgres
+    networks:
+      - postgres-network
+    ports:
+      - "5432:5432"
+    volumes:
+      - /Users/erasmo.pinheiro/Developer/docker-volume/postgresql/data:/var/lib/postgresql/data
 
-  teste-pgadmin-compose:
-    image: dpage/pgadmin4
+  demo-tool-pgadmin:
+    depends_on:
+      - demo-db-postgres
     environment:
       PGADMIN_DEFAULT_EMAIL: "erasmosouza@gmail.com"
       PGADMIN_DEFAULT_PASSWORD: "Admin123"
-    ports:
-      - "15432:80"
-    depends_on:
-      - demo-api-kotlin
+    image: dpage/pgadmin4
     networks:
       - postgres-network
+    ports:
+      - "15432:80"
 
   demo-api-kotlin:
-    image: demo-api:1.0
+    depends_on:
+      - demo-db-postgres
+    image: demo-api:1.1
     ports:
       - "8080:8080"
     networks:
       - postgres-network
-    depends_on:
-      - demo-db-postgres
 
 networks:
   postgres-network:

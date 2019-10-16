@@ -17,11 +17,11 @@ import javax.persistence.TemporalType
 open class Audit()
 {
 
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
-    val createdAt: Timestamp? = null
+    var createdAt: Timestamp? = null
 
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
-    val updatedAt: Timestamp? = null
+    var updatedAt: Timestamp? = null
 }
