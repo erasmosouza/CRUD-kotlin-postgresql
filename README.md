@@ -27,6 +27,6 @@ Executar o docker-compose para subir o Postgres e a nossa Demo-Api
 ## Testando a aplicação
 > curl http://localhost:8080/check?name=Kotlin
 >{"id":1,"message":"Hello, Docker"}
->
+
 ## Testando o Swagger
 Agora pode abrir o abrir no navegador na seguinte url http://localhost:8080/swagger-ui.html e ver o resultado.
