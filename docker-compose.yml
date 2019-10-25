@@ -1,4 +1,5 @@
 # Execute "docker-compose up -d" in the terminal
+# Execute "docker-compose logs -f" to see the logs
 # Execute "docker-compose stop" to stop the containers
 
 version: '3'

@@ -26,70 +26,47 @@ class CategoryControllerTest {
     @Autowired
     var restTemplate: TestRestTemplate? = null
 
-    var categoryId: Long? = null;
-
     @Test
-    @Order(1)
-    fun createNewCategoryTest() {
-        // Create
-        var category: Category = Category(categoryName = "Primeira Categoria")
-        var retCategory = restTemplate?.postForObject(
-            "http://localhost:$port/api/categories?name=Kotlin",
-            category,
-            Category::class.java
-        )
-        this.categoryId = retCategory?.id
+    fun createAndUpdateTest() {
 
-        println("createNewCategoryTest ====> $retCategory")
-        Assert.assertEquals(category.categoryName, retCategory?.categoryName)
-    }
+        // Create 3 categories
+        for (categoryName in listOf("Primeira", "Segunda", "Terceira")) {
+            postCategory(categoryName)
+        }
 
-    @Test
-    @Order(2)
-    fun getCategoryByIdTest() {
+        // Update the second category name
+        putCategory(2, Category(1, "Segunda Alterada"))
 
-        var isValid = false
-        // Get
-        var category =
-            restTemplate?.getForObject(
-                "http://localhost:$port/api/categories/${this.categoryId}",
-                Category::class.java,
-                200
-            )
+        // Get category list with limit 2
+        var list = listAllCategories(0, 2)
 
-        isValid = if (category != null) true else false
-
-        println("getCategoryByIdTest ====> $category")
-        Assert.assertTrue(isValid)
-    }
-
-    @Test
-    @Order(3)
-    fun getAllCategoriesTest() {
-        //getAll
-        var listAllCategory =
-            restTemplate?.getForObject("http://localhost:$port/api/categories/", List::class.java, 200)
-
-        @Suppress("UNCHECKED_CAST")
-        val list: List<Category>? = listAllCategory as? List<Category>
-
-        var isValid: Boolean = true
-
-        if (list?.isEmpty() == true)
-            isValid = false
-
-        println("getAllCategoriesTest ====> $list")
-        Assert.assertTrue(isValid)
+        Assert.assertEquals(2, list?.size)
     }
 
     @Test
     @Order(4)
     fun deleteCategoryByIdTest() {
 
-        // delete
-        restTemplate?.delete("http://localhost:$port/api/categories/${this.categoryId}")
+        // Delete the second record
+        restTemplate?.delete("${getTestUrl()}/2")
 
-        println("getAllCategoriesTest ====> ${this.categoryId}")
         Assert.assertTrue(true)
     }
+
+    fun getTestUrl(): String = "http://localhost:$port/api/categories"
+
+    fun postCategory(categoryName: String): Category? = restTemplate?.postForObject(
+        getTestUrl(),
+        Category(categoryName = categoryName),
+        Category::class.java
+    )
+
+    fun putCategory(id: Long, category: Category): Unit? = restTemplate?.put(
+        "${getTestUrl()}/$id",
+        category,
+        Category::class
+    )
+
+    fun listAllCategories(page: Int, size: Int): List<*>? =
+        restTemplate?.getForObject("${getTestUrl()}?page=0&size=2", List::class.java, 200)
 }

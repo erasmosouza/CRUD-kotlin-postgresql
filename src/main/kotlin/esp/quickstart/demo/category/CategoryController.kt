@@ -1,39 +1,47 @@
 package esp.quickstart.demo.category
 
+import esp.quickstart.demo.book.Book
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 @RestController
-@RequestMapping("/api")
-class CategoryController(private val categoryRepository: CategoryRepository) {
+@RequestMapping("/api/categories")
+class CategoryController(private val service: CategoryService) {
 
-    @GetMapping("/categories")
-    fun getAllCategories(): List<Category> = categoryRepository.findAll()
+    @GetMapping()
+    fun all(
+        @RequestParam("page", defaultValue = "0") page: Int,
+        @RequestParam("size", defaultValue = "10") size: Int
+    ): List<Category> = service.allByPagination(page, size)
 
-    @PostMapping("/categories")
-    fun createNewCategory(@Valid @RequestBody category: Category): ResponseEntity<Category> {
-        categoryRepository.save(category)
-        return ResponseEntity.ok(category)
-    }
-
-    @GetMapping("/categories/{id}")
-    fun getCategoryById(@PathVariable(value = "id") categoryId: Long): ResponseEntity<Category> {
-        return categoryRepository.findById(categoryId).map { category ->
+    @GetMapping("/{id}")
+    fun findById(@PathVariable(value = "id") categoryId: Long): ResponseEntity<Category> {
+        return service.findById(categoryId).map { category ->
             ResponseEntity.ok(category)
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    @DeleteMapping("/categories/{id}")
-    fun deleteCategoryById(@PathVariable(value = "id") categoryId: Long): ResponseEntity<Void> {
-
-        return categoryRepository.findById(categoryId).map { category ->
-            categoryRepository.delete(category)
-            ResponseEntity<Void>(HttpStatus.OK)
-        }.orElse(ResponseEntity.notFound().build())
-
+    @PostMapping()
+    fun create(@Valid @RequestBody category: Category): ResponseEntity<Category> {
+        return ResponseEntity.ok(service.save(category))
     }
 
+    @PutMapping("/{id}")
+    fun update(@PathVariable id: Long, @Valid @RequestBody category: Category): ResponseEntity<Category> {
+        if (service.existsById(id)) {
+            return ResponseEntity.ok(service.update(id, category))
+        }
+        return ResponseEntity.notFound().build()
+    }
 
+    @DeleteMapping("/{id}")
+    fun deleteById(@PathVariable(value = "id") categoryId: Long): ResponseEntity<Void> {
+        if (service.existsById(categoryId)) {
+            service.deleteById(categoryId)
+            return ResponseEntity.ok().build()
+        }
+        return ResponseEntity.notFound().build()
+    }
 }
