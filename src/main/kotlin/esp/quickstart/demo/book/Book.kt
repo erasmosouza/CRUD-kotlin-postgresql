@@ -26,7 +26,7 @@ data class Book (
     val description: String = "",
 
     @JsonManagedReference
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = arrayOf(CascadeType.MERGE))
     @JoinColumn(name = "category_id")
-    val category: Category? = null
-): Audit()
+    var category: Category? = null
+)/*: Audit()*/

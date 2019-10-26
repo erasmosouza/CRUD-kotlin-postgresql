@@ -9,10 +9,10 @@ import java.util.*
 @Service
 class CategoryService(private val repository: CategoryRepository) {
 
-    fun all(): List<Category> = repository.findAll()
+    fun all(): List<Category> = repository.findAll().toList()
 
     fun allByPagination(page: Int, size: Int): List<Category> {
-        var pag: Pageable = PageRequest.of(page, size);
+        val pag: Pageable = PageRequest.of(page, size);
         return repository.findAll(pag).toList()
     }
 
@@ -20,7 +20,7 @@ class CategoryService(private val repository: CategoryRepository) {
 
     fun existsById(id: Long): Boolean = repository.existsById(id)
 
-    fun save(category: Category): Category = repository.saveAndFlush(category)
+    fun save(category: Category): Category = repository.save(category)
 
     fun update(id: Long, category: Category): Category {
         var safeCategory = category.copy(id = id)

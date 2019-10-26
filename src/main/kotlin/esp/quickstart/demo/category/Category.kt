@@ -14,9 +14,9 @@ data class Category(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
-    val id: Long = 0,
+    var id: Long = 0,
 
     @get: NotBlank
-    val categoryName: String = ""
+    var categoryName: String = ""
 
 )/* : Audit()*/
