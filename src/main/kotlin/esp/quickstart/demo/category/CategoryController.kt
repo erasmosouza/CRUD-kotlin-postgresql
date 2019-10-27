@@ -25,7 +25,11 @@ class CategoryController(private val service: CategoryService) {
 
     @PostMapping()
     fun create(@Valid @RequestBody category: Category): ResponseEntity<Category> {
-        return ResponseEntity.ok(service.save(category))
+
+        if (category.categoryName == ""){
+            return ResponseEntity(service.save(category), HttpStatus.CONFLICT)
+        }
+        return ResponseEntity(service.save(category), HttpStatus.CREATED)
     }
 
     @PutMapping("/{id}")

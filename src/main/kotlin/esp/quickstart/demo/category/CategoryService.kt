@@ -2,7 +2,6 @@ package esp.quickstart.demo.category
 
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
-import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -20,7 +19,10 @@ class CategoryService(private val repository: CategoryRepository) {
 
     fun existsById(id: Long): Boolean = repository.existsById(id)
 
-    fun save(category: Category): Category = repository.save(category)
+    fun save(category: Category): Category{
+        println("service.save---------------->$category")
+        return repository.save(category)
+    }
 
     fun update(id: Long, category: Category): Category {
         var safeCategory = category.copy(id = id)

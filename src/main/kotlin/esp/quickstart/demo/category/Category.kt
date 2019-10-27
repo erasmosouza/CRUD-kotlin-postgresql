@@ -7,6 +7,7 @@ import esp.quickstart.demo.audit.Audit
 import esp.quickstart.demo.book.Book
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
+import javax.validation.constraints.Size
 
 @Entity
 data class Category(
@@ -16,7 +17,8 @@ data class Category(
     @JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
     var id: Long = 0,
 
-    @get: NotBlank
+    @NotBlank
+    @Size(min = 3, max = 60, message = "First name cannot be longer than 60 characters")
     var categoryName: String = ""
 
 )/* : Audit()*/
