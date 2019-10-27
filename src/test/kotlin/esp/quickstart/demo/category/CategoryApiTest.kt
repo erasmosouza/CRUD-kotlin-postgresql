@@ -18,7 +18,7 @@ import javax.annotation.Resource
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
-class CategoryControllerTest {
+class CategoryApiTest {
 
     @LocalServerPort
     var port: Int? = null

@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = [Application::class])
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
-class BookControllerTest {
+class BookApiTest {
 
     @LocalServerPort
     var port: Int? = null
