@@ -26,8 +26,8 @@ class CategoryController(private val service: CategoryService) {
     @PostMapping()
     fun create(@Valid @RequestBody category: Category): ResponseEntity<Category> {
 
-        if (category.categoryName == ""){
-            return ResponseEntity(service.save(category), HttpStatus.CONFLICT)
+        if (category.categoryName == ""){ // Em breve, trocar por validação de form
+            return ResponseEntity( category, HttpStatus.CONFLICT)
         }
         return ResponseEntity(service.save(category), HttpStatus.CREATED)
     }
