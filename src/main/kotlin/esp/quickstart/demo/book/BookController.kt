@@ -1,5 +1,6 @@
 package esp.quickstart.demo.book
 
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
@@ -11,26 +12,39 @@ class BookController(
 ) {
 
     @GetMapping()
-    fun allBook(
+    fun all(
         @RequestParam("page", defaultValue = "0") page: Int,
         @RequestParam("size", defaultValue = "10") size: Int
-    ): List<Book> = bookService.allByPagination(page, size)
+    ): ResponseEntity<List<Book>> {
+
+        val bookList =  bookService.allByPagination(page, size)
+
+        if (bookList.isEmpty()){
+            return ResponseEntity.notFound().build()
+        }
+
+        return ResponseEntity.ok(bookList)
+    }
 
     @GetMapping("/{id}")
-    fun findByIdBook(@PathVariable(value = "id") id: Long): ResponseEntity<Book> {
+    fun findById(@PathVariable(value = "id") id: Long): ResponseEntity<Book> {
         return bookService.findById(id).map { book ->
             ResponseEntity.ok(book)
         }.orElse(ResponseEntity.notFound().build())
     }
 
     @PostMapping()
-    fun createBook(@Valid @RequestBody book: Book): ResponseEntity<Book> {
-        println("==============>createBook")
-        return ResponseEntity.ok(bookService.save(book))
+    fun create(@Valid @RequestBody book: Book): ResponseEntity<Book> {
+
+        val newBook: Book = bookService.save(book)
+        if (newBook.id == 0L){
+            return ResponseEntity(newBook, HttpStatus.CONFLICT)
+        }
+        return ResponseEntity(newBook, HttpStatus.CREATED)
     }
 
     @PutMapping("/{id}")
-    fun updateBook(@PathVariable id: Long, @Valid @RequestBody book: Book): ResponseEntity<Book> {
+    fun update(@PathVariable id: Long, @Valid @RequestBody book: Book): ResponseEntity<Book> {
         if (bookService.existsById(id)) {
             return ResponseEntity.ok(bookService.update(id, book))
         }
@@ -38,7 +52,7 @@ class BookController(
     }
 
     @DeleteMapping("/{id}")
-    fun deleteByIdBook(@PathVariable(value = "id") id: Long): ResponseEntity<Void> {
+    fun deleteById(@PathVariable(value = "id") id: Long): ResponseEntity<Void> {
         if (bookService.existsById(id)) {
             bookService.deleteById(id)
             return ResponseEntity.ok().build()

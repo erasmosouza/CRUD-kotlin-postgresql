@@ -14,12 +14,14 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Repository
 import org.springframework.test.context.junit4.SpringRunner
 import javax.annotation.Resource
-
+/*
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
-class CategoryApiTest {
+*/
 
+class CategoryApiTest {
+/*
     @LocalServerPort
     var port: Int? = null
 
@@ -69,4 +71,6 @@ class CategoryApiTest {
 
     fun listAllCategories(page: Int, size: Int): List<*>? =
         restTemplate?.getForObject("${getTestUrl()}?page=0&size=2", List::class.java, 200)
+*/
+
 }

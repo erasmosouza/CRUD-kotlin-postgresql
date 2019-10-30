@@ -1,6 +1,5 @@
 package esp.quickstart.demo.category
 
-import esp.quickstart.demo.book.Book
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -14,7 +13,15 @@ class CategoryController(private val service: CategoryService) {
     fun all(
         @RequestParam("page", defaultValue = "0") page: Int,
         @RequestParam("size", defaultValue = "10") size: Int
-    ): List<Category> = service.allByPagination(page, size)
+    ): ResponseEntity<List<Category>>{
+
+        val catList = service.allByPagination(page, size)
+
+        if (catList.isEmpty()){
+            return ResponseEntity.notFound().build()
+        }
+        return ResponseEntity.ok(catList)
+    }
 
     @GetMapping("/{id}")
     fun findById(@PathVariable(value = "id") categoryId: Long): ResponseEntity<Category> {
@@ -26,10 +33,11 @@ class CategoryController(private val service: CategoryService) {
     @PostMapping()
     fun create(@Valid @RequestBody category: Category): ResponseEntity<Category> {
 
-        if (category.categoryName == ""){ // Em breve, trocar por validação de form
-            return ResponseEntity( category, HttpStatus.CONFLICT)
+        val newCategory: Category = service.save(category)
+        if (newCategory.id == 0L){
+            return ResponseEntity(newCategory, HttpStatus.CONFLICT)
         }
-        return ResponseEntity(service.save(category), HttpStatus.CREATED)
+        return ResponseEntity(newCategory, HttpStatus.CREATED)
     }
 
     @PutMapping("/{id}")

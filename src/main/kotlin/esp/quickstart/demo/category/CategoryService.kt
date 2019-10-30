@@ -19,9 +19,12 @@ class CategoryService(private val repository: CategoryRepository) {
 
     fun existsById(id: Long): Boolean = repository.existsById(id)
 
-    fun save(category: Category): Category{
-        println("service.save---------------->$category")
-        return repository.save(category)
+    fun save(category: Category): Category {
+
+        if (category.categoryName == ""){ // Em breve, trocar por validação de form
+            return category
+        }
+        return  repository.save(category)
     }
 
     fun update(id: Long, category: Category): Category {
