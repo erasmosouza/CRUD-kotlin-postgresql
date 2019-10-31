@@ -1,5 +1,9 @@
 package esp.quickstart
 
-data class Health(val id: Long, val content: String)
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.*
+
+data class Health(val id: Long, val content: String, val dateNow: LocalDateTime)
 {
 }
