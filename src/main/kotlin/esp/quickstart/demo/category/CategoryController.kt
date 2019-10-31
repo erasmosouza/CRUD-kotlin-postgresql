@@ -13,7 +13,7 @@ class CategoryController(private val service: CategoryService) {
     fun all(
         @RequestParam("page", defaultValue = "0") page: Int,
         @RequestParam("size", defaultValue = "10") size: Int
-    ): ResponseEntity<List<Category>>{
+    ): ResponseEntity<List<CategoryDTO>>{
 
         val catList = service.allByPagination(page, size)
 
@@ -24,16 +24,20 @@ class CategoryController(private val service: CategoryService) {
     }
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable(value = "id") categoryId: Long): ResponseEntity<Category> {
-        return service.findById(categoryId).map { category ->
-            ResponseEntity.ok(category)
-        }.orElse(ResponseEntity.notFound().build())
+    fun findById(@PathVariable(value = "id") categoryId: Long): ResponseEntity<CategoryDTO> {
+
+        val category = service.findById(categoryId)
+
+        if (category.id == 0L){
+            return ResponseEntity.notFound().build()
+        }
+        return ResponseEntity.ok(category)
     }
 
     @PostMapping()
-    fun create(@Valid @RequestBody category: Category): ResponseEntity<Category> {
+    fun create(@Valid @RequestBody category: CategoryDTO): ResponseEntity<CategoryDTO> {
 
-        val newCategory: Category = service.save(category)
+        val newCategory: CategoryDTO = service.save(category)
         if (newCategory.id == 0L){
             return ResponseEntity(newCategory, HttpStatus.CONFLICT)
         }
@@ -41,7 +45,7 @@ class CategoryController(private val service: CategoryService) {
     }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @Valid @RequestBody category: Category): ResponseEntity<Category> {
+    fun update(@PathVariable id: Long, @Valid @RequestBody category: CategoryDTO): ResponseEntity<CategoryDTO> {
         if (service.existsById(id)) {
             return ResponseEntity.ok(service.update(id, category))
         }

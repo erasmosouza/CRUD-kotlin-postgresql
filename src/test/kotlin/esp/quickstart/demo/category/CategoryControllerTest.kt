@@ -19,33 +19,33 @@ class CategoryControllerTest {
         val mock: CategoryService = mock()
         val controller: CategoryController = CategoryController(mock)
 
-        whenever(mock.allByPagination(0, 10)).thenReturn(listOf(Category(), Category()))
+        whenever(mock.allByPagination(0, 10)).thenReturn(listOf(CategoryDTO(), CategoryDTO()))
         whenever(mock.allByPagination(1, 10)).thenReturn(listOf())
 
-        val categorySuccess: ResponseEntity<List<Category>> = controller.all(0, 10)
+        val categorySuccess: ResponseEntity<List<CategoryDTO>> = controller.all(0, 10)
         Assert.assertEquals(HttpStatus.OK, categorySuccess.statusCode)
 
-        val categoryEmpty: ResponseEntity<List<Category>> = controller.all(1, 10)
+        val categoryEmpty: ResponseEntity<List<CategoryDTO>> = controller.all(1, 10)
         Assert.assertEquals(HttpStatus.NOT_FOUND, categoryEmpty.statusCode)
     }
 
     @Test
     fun shouldRetrieveACategoryTest(){
 
-        val category = Category(id = 1,categoryName = "Minha Categoria")
+        val category = CategoryDTO(id = 1,categoryName = "Minha Categoria")
 
         // Mock the Service
         val mock: CategoryService = mock()
-        whenever(mock.findById(1)).thenReturn(Optional.of(category))
-        whenever(mock.findById(2)).thenReturn(Optional.empty())
+        whenever(mock.findById(1)).thenReturn(category)
+        whenever(mock.findById(2)).thenReturn(CategoryDTO())
 
         // 200
         val controller: CategoryController = CategoryController(mock)
-        val categorySuccess: ResponseEntity<Category> = controller.findById(1)
+        val categorySuccess: ResponseEntity<CategoryDTO> = controller.findById(1)
         Assert.assertEquals(HttpStatus.OK, categorySuccess.statusCode)
 
         // Not Found
-        val categoryFail: ResponseEntity<Category> = controller.findById(2)
+        val categoryFail: ResponseEntity<CategoryDTO> = controller.findById(2)
         Assert.assertEquals(HttpStatus.NOT_FOUND, categoryFail.statusCode)
     }
 
@@ -53,9 +53,9 @@ class CategoryControllerTest {
     fun shouldCreateNewCategoryTest() {
 
         // Cenarios
-        var categorySuccess = Category(id = 1,categoryName = "Minha Categoria")
-        var categoryToCreate = Category(categoryName = "Minha Categoria")
-        var categoryConflict = Category()
+        var categorySuccess = CategoryDTO(id = 1,categoryName = "Minha Categoria")
+        var categoryToCreate = CategoryDTO(categoryName = "Minha Categoria")
+        var categoryConflict = CategoryDTO()
 
         // mock the Service
         val mock: CategoryService = mock()
@@ -64,11 +64,11 @@ class CategoryControllerTest {
         val controller: CategoryController = CategoryController(mock)
 
         // 409
-        val conflictTest: ResponseEntity<Category> = controller.create(categoryConflict)
+        val conflictTest: ResponseEntity<CategoryDTO> = controller.create(categoryConflict)
         Assert.assertEquals(HttpStatus.CONFLICT, conflictTest.statusCode)
 
         // 201
-        val createdTest: ResponseEntity<Category> = controller.create(categoryToCreate)
+        val createdTest: ResponseEntity<CategoryDTO> = controller.create(categoryToCreate)
         Assert.assertEquals(HttpStatus.CREATED, createdTest.statusCode)
     }
 
@@ -78,7 +78,7 @@ class CategoryControllerTest {
 
         val mock: CategoryService = mock()
         val controller: CategoryController = CategoryController(mock)
-        val category =  Category(1, "Atualizada")
+        val category =  CategoryDTO(1, "Atualizada")
 
         // Mock Service
         whenever(mock.existsById(1)).thenReturn(true)
@@ -86,11 +86,11 @@ class CategoryControllerTest {
         whenever(mock.update(1, category)).thenReturn(category)
 
         // 200
-        val categorySuccess: ResponseEntity<Category> = controller.update(1, category)
+        val categorySuccess: ResponseEntity<CategoryDTO> = controller.update(1, category)
         Assert.assertEquals(HttpStatus.OK, categorySuccess.statusCode)
 
         // Not Found
-        val categoryFail: ResponseEntity<Category> = controller.update(2, category)
+        val categoryFail: ResponseEntity<CategoryDTO> = controller.update(2, category)
         Assert.assertEquals(HttpStatus.NOT_FOUND, categoryFail.statusCode)
 
     }

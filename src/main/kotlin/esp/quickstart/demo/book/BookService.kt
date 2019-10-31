@@ -1,6 +1,7 @@
 package esp.quickstart.demo.book
 
 import esp.quickstart.demo.category.Category
+import esp.quickstart.demo.category.CategoryDTO
 import esp.quickstart.demo.category.CategoryRepository
 import esp.quickstart.demo.category.CategoryService
 import org.springframework.data.domain.PageRequest
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class BookService(private val repository: BookRepository, private val categoryService: CategoryService) {
+class BookService(private val repository: BookRepository, private val categoryRepository: CategoryRepository) {
 
     fun all(): List<Book> = repository.findAll().toList()
 
@@ -28,22 +29,22 @@ class BookService(private val repository: BookRepository, private val categorySe
 
         println("=====> Valor do Form: ${book.category.id}")
 
-        val category: Optional<Category> = categoryService.findById(book.category.id)
-        book.category = category.get()
+        val category: Category = categoryRepository.findById(book.category.id).get()
+        book.category = category
 
         return repository.save(book)
     }
 
     fun update(id: Long, book: Book): Book {
 
-        val category: Optional<Category> = categoryService.findById(book.category.id)
+        val category: Category = categoryRepository.findById(book.category.id).get()
 
         val safeBook: Book = repository.findById(id).get()
 
         safeBook.title = book.title
         safeBook.description = book.description
         safeBook.author = book.author
-        safeBook.category = category.get()
+        safeBook.category = category
 
         return this.save(safeBook)
     }

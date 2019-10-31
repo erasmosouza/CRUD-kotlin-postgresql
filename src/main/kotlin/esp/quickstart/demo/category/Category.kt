@@ -22,3 +22,8 @@ data class Category(
     var categoryName: String = ""
 
 )/* : Audit()*/
+{
+    fun toDTO(): CategoryDTO = CategoryDTO(id=this.id, categoryName = this.categoryName)
+
+    fun fromDTO(dto: CategoryDTO): Category = Category(categoryName = dto.categoryName)
+}

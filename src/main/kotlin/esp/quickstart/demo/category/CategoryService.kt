@@ -10,26 +10,30 @@ class CategoryService(private val repository: CategoryRepository) {
 
     fun all(): List<Category> = repository.findAll().toList()
 
-    fun allByPagination(page: Int, size: Int): List<Category> {
+    fun allByPagination(page: Int, size: Int): List<CategoryDTO> {
         val pag: Pageable = PageRequest.of(page, size);
-        return repository.findAll(pag).toList()
+        return repository.findAll(pag).map { it.toDTO() }.toList()
     }
 
-    fun findById(id: Long): Optional<Category> = repository.findById(id)
+    fun findById(id: Long): CategoryDTO = repository.findById(id).map { category -> category.toDTO() }.orElse(CategoryDTO())
 
     fun existsById(id: Long): Boolean = repository.existsById(id)
 
-    fun save(category: Category): Category {
+    fun save(category: CategoryDTO): CategoryDTO {
 
-        if (category.categoryName == ""){ // Em breve, trocar por validação de form
+        if (category.categoryName == "") { // Em breve, trocar por validação de form
             return category
         }
-        return  repository.save(category)
+        return repository.save(Category(categoryName = category.categoryName)).toDTO()
     }
 
-    fun update(id: Long, category: Category): Category {
-        var safeCategory = category.copy(id = id)
-        return this.save(safeCategory)
+    fun update(id: Long, categoryDTO: CategoryDTO): CategoryDTO {
+
+        var categoryEntity: Category = repository.findById(id).get()
+        categoryEntity.categoryName = categoryDTO.categoryName
+        repository.save(categoryEntity)
+
+        return categoryEntity.toDTO()
     }
 
     fun deleteById(id: Long) = repository.deleteById(id)
