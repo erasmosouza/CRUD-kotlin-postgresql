@@ -14,7 +14,7 @@ data class Category(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(value = "id"/*, access = JsonProperty.Access.READ_ONLY*/)
     var id: Long = 0,
 
     @NotBlank

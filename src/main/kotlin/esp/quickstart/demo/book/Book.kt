@@ -17,16 +17,16 @@ data class Book (
     val id: Long = 0,
 
     @get: NotBlank
-    val title: String = "",
+    var title: String = "",
 
     @get: NotBlank
-    val author: String = "",
+    var author: String = "",
 
     @get: NotBlank
-    val description: String = "",
+    var description: String = "",
 
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER, cascade = arrayOf(CascadeType.MERGE))
     @JoinColumn(name = "category_id")
-    var category: Category? = null
+    var category: Category = Category()
 )/*: Audit()*/
