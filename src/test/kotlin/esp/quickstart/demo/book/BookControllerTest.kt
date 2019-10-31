@@ -3,16 +3,13 @@ package esp.quickstart.demo.book
 import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
-import esp.quickstart.demo.category.Category
-import esp.quickstart.demo.category.CategoryController
-import esp.quickstart.demo.category.CategoryService
+import esp.quickstart.demo.category.CategoryDTO
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.junit4.SpringRunner
-import java.util.*
 
 @RunWith(SpringRunner::class)
 class BookControllerTest {
@@ -24,39 +21,39 @@ class BookControllerTest {
         val mock: BookService = mock()
         val controller: BookController = BookController(mock)
 
-        whenever(mock.allByPagination(0, 10)).thenReturn(listOf(Book(), Book()))
+        whenever(mock.allByPagination(0, 10)).thenReturn(listOf(BookDTO(), BookDTO()))
         whenever(mock.allByPagination(1, 10)).thenReturn(listOf())
 
-        val categorySuccess: ResponseEntity<List<Book>> = controller.all(0, 10)
+        val categorySuccess: ResponseEntity<List<BookDTO>> = controller.all(0, 10)
         Assert.assertEquals(HttpStatus.OK, categorySuccess.statusCode)
 
-        val categoryEmpty: ResponseEntity<List<Book>> = controller.all(1, 10)
+        val categoryEmpty: ResponseEntity<List<BookDTO>> = controller.all(1, 10)
         Assert.assertEquals(HttpStatus.NOT_FOUND, categoryEmpty.statusCode)
     }
 
     @Test
     fun shouldRetrieveABookTest() {
 
-        val book = Book(
+        val book = BookDTO(
             id = 1,
             title = "Test Book",
             description = "Descricao do Livro",
             author = "Erasmo",
-            category = Category(1, "Categoria do Livro")
+            category = CategoryDTO(1, "Categoria do Livro")
         )
 
         // Mock the Service
         val mock: BookService = mock()
-        whenever(mock.findById(1)).thenReturn(Optional.of(book))
-        whenever(mock.findById(2)).thenReturn(Optional.empty())
+        whenever(mock.findById(1)).thenReturn(book)
+        whenever(mock.findById(2)).thenReturn(BookDTO())
 
         // 200
         val controller: BookController = BookController(mock)
-        val bookSuccess: ResponseEntity<Book> = controller.findById(1)
+        val bookSuccess: ResponseEntity<BookDTO> = controller.findById(1)
         Assert.assertEquals(HttpStatus.OK, bookSuccess.statusCode)
 
         // Not Found
-        val bookFail: ResponseEntity<Book> = controller.findById(2)
+        val bookFail: ResponseEntity<BookDTO> = controller.findById(2)
         Assert.assertEquals(HttpStatus.NOT_FOUND, bookFail.statusCode)
     }
 
@@ -65,21 +62,21 @@ class BookControllerTest {
     fun shouldCreateNewBookTest() {
 
         // Cenarios
-        var bookSuccess = Book(
+        var bookSuccess = BookDTO(
             id = 1,
             title = "Test Book",
             description = "Descricao do Livro",
             author = "Erasmo",
-            category = Category(1, "Categoria do Livro")
+            category = CategoryDTO(1, "Categoria do Livro")
         )
 
-        var bookToCreate = Book(
+        var bookToCreate = BookDTO(
             title = "Test Book",
             description = "Descricao do Livro",
             author = "Erasmo",
-            category = Category(1, "Categoria do Livro")
+            category = CategoryDTO(1, "Categoria do Livro")
         )
-        var bookConflict = Book()
+        var bookConflict = BookDTO()
 
         // mock the Service
         val mock: BookService = mock()
@@ -88,11 +85,11 @@ class BookControllerTest {
         val controller: BookController = BookController(mock)
 
         // 409
-        val conflictTest: ResponseEntity<Book> = controller.create(bookConflict)
+        val conflictTest: ResponseEntity<BookDTO> = controller.create(bookConflict)
         Assert.assertEquals(HttpStatus.CONFLICT, conflictTest.statusCode)
 
         // 201
-        val createdTest: ResponseEntity<Book> = controller.create(bookToCreate)
+        val createdTest: ResponseEntity<BookDTO> = controller.create(bookToCreate)
         Assert.assertEquals(HttpStatus.CREATED, createdTest.statusCode)
     }
 
@@ -101,12 +98,13 @@ class BookControllerTest {
 
         val mock: BookService = mock()
         val controller: BookController = BookController(mock)
-        val book =  Book(
+        val book = BookDTO(
             id = 1,
             title = "Test Book",
             description = "Descricao do Livro",
             author = "Erasmo",
-            category = Category(1, "Categoria do Livro"))
+            category = CategoryDTO(1, "Categoria do Livro")
+        )
 
         // Mock Service
         whenever(mock.existsById(1)).thenReturn(true)
@@ -114,16 +112,16 @@ class BookControllerTest {
         whenever(mock.update(1, book)).thenReturn(book)
 
         // 200
-        val bookSuccess: ResponseEntity<Book> = controller.update(1, book)
+        val bookSuccess: ResponseEntity<BookDTO> = controller.update(1, book)
         Assert.assertEquals(HttpStatus.OK, bookSuccess.statusCode)
 
         // Not Found
-        val bookFail: ResponseEntity<Book> = controller.update(2, book)
+        val bookFail: ResponseEntity<BookDTO> = controller.update(2, book)
         Assert.assertEquals(HttpStatus.NOT_FOUND, bookFail.statusCode)
     }
 
     @Test
-    fun shouldDeleteCategoryByIdTest(){
+    fun shouldDeleteCategoryByIdTest() {
 
         // Mock the Service
         val mock: BookService = mock()

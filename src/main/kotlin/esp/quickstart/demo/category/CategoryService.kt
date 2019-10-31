@@ -8,7 +8,7 @@ import java.util.*
 @Service
 class CategoryService(private val repository: CategoryRepository) {
 
-    fun all(): List<Category> = repository.findAll().toList()
+    fun all(): List<CategoryDTO> = repository.findAll().map { it.toDTO() }.toList()
 
     fun allByPagination(page: Int, size: Int): List<CategoryDTO> {
         val pag: Pageable = PageRequest.of(page, size);

@@ -13,40 +13,43 @@ import java.util.*
 @Service
 class BookService(private val repository: BookRepository, private val categoryRepository: CategoryRepository) {
 
-    fun all(): List<Book> = repository.findAll().toList()
+    fun all(): List<BookDTO> = repository.findAll().map { it.toDTO() }.toList()
 
-    fun allByPagination(page: Int, size: Int): List<Book> {
+    fun allByPagination(page: Int, size: Int): List<BookDTO> {
         val pag: Pageable = PageRequest.of(page, size);
-        return repository.findAll(pag).toList()
+        return repository.findAll(pag).map { it.toDTO() }.toList()
     }
 
-    fun findById(id: Long): Optional<Book> = repository.findById(id)
+    fun findById(id: Long): BookDTO = repository.findById(id).map { book -> book.toDTO() }.orElse(BookDTO())
 
     fun existsById(id: Long): Boolean = repository.existsById(id)
 
-    fun save(book: Book): Book {
+    fun save(bookDTO: BookDTO): BookDTO {
 
+        val categoryEntity: Category = categoryRepository.findById(bookDTO.category.id).get()
 
-        println("=====> Valor do Form: ${book.category.id}")
-
-        val category: Category = categoryRepository.findById(book.category.id).get()
-        book.category = category
-
-        return repository.save(book)
+        return repository.save(
+            Book(
+                title = bookDTO.title,
+                author = bookDTO.author,
+                description = bookDTO.description,
+                category = categoryEntity
+            )
+        ).toDTO()
     }
 
-    fun update(id: Long, book: Book): Book {
+    fun update(id: Long, bookDTO: BookDTO): BookDTO {
 
-        val category: Category = categoryRepository.findById(book.category.id).get()
+        val categoryEntity: Category = categoryRepository.findById(bookDTO.category.id).get()
 
-        val safeBook: Book = repository.findById(id).get()
+        val bookEntity: Book = repository.findById(id).get()
 
-        safeBook.title = book.title
-        safeBook.description = book.description
-        safeBook.author = book.author
-        safeBook.category = category
+        bookEntity.title = bookDTO.title
+        bookEntity.description = bookDTO.description
+        bookEntity.author = bookDTO.author
+        bookEntity.category = categoryEntity
 
-        return this.save(safeBook)
+        return repository.save(bookEntity).toDTO()
     }
 
     fun deleteById(id: Long) = repository.deleteById(id)

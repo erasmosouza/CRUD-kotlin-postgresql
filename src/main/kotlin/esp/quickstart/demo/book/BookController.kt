@@ -15,7 +15,7 @@ class BookController(
     fun all(
         @RequestParam("page", defaultValue = "0") page: Int,
         @RequestParam("size", defaultValue = "10") size: Int
-    ): ResponseEntity<List<Book>> {
+    ): ResponseEntity<List<BookDTO>> {
 
         val bookList =  bookService.allByPagination(page, size)
 
@@ -27,16 +27,20 @@ class BookController(
     }
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable(value = "id") id: Long): ResponseEntity<Book> {
-        return bookService.findById(id).map { book ->
-            ResponseEntity.ok(book)
-        }.orElse(ResponseEntity.notFound().build())
+    fun findById(@PathVariable(value = "id") id: Long): ResponseEntity<BookDTO> {
+
+        val bookDTO = bookService.findById(id)
+
+        if (bookDTO.id == 0L){
+            return ResponseEntity.notFound().build()
+        }
+        return ResponseEntity.ok(bookDTO)
     }
 
     @PostMapping()
-    fun create(@Valid @RequestBody book: Book): ResponseEntity<Book> {
+    fun create(@Valid @RequestBody book: BookDTO): ResponseEntity<BookDTO> {
 
-        val newBook: Book = bookService.save(book)
+        val newBook: BookDTO = bookService.save(book)
         if (newBook.id == 0L){
             return ResponseEntity(newBook, HttpStatus.CONFLICT)
         }
@@ -44,7 +48,7 @@ class BookController(
     }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @Valid @RequestBody book: Book): ResponseEntity<Book> {
+    fun update(@PathVariable id: Long, @Valid @RequestBody book: BookDTO): ResponseEntity<BookDTO> {
         if (bookService.existsById(id)) {
             return ResponseEntity.ok(bookService.update(id, book))
         }

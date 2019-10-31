@@ -21,7 +21,6 @@ class BookRepositoryTest {
     @Test
     fun saveTest(){
 
-
         val cat = repositoryCategory!!.save(Category(categoryName = "Minha Categoria"))
         val cat2 = repositoryCategory!!.save(Category(categoryName = "Minha Categoria 2"))
         val book =  Book(
@@ -43,5 +42,4 @@ class BookRepositoryTest {
 
         println("All Category: ${repositoryCategory?.findAll()}")
     }
-
 }
